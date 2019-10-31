@@ -25,6 +25,7 @@ describe('Auth Router', () => {
     describe(`${userType} users`, () => {
       
       let encodedToken;
+      console.log(encodedToken);
       let id;
       
       it('can create one', () => {
