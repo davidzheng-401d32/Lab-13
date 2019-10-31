@@ -44,6 +44,11 @@ users.statics.authenticateBasic = function(auth) {
     .catch(error => {throw error;});
 };
 
+users.statics.authenticateToken = function (token) {
+  let parsedToken = jwt.verify(token, process.env.SECRET);
+  return this.findOne({_id: parsedToken.id});
+};
+
 users.methods.comparePassword = function(password) {
   return bcrypt.compare( password, this.password )
     .then( valid => valid ? this : null);
@@ -56,7 +61,12 @@ users.methods.generateToken = function() {
     role: this.role,
   };
 
-  return jwt.sign(token, process.env.SECRET);
+  //token signing options: expires after 15 minutes
+  let tokenOptions = {
+    expiresIn:900,
+  };
+
+  return jwt.sign(token, process.env.SECRET, tokenOptions);
 };
 
 module.exports = mongoose.model('users', users);

@@ -8,10 +8,12 @@ module.exports = (req, res, next) => {
     let [authType, authString] = req.headers.authorization.split(/\s+/);
     
     switch( authType.toLowerCase() ) {
-      case 'basic': 
-        return _authBasic(authString);
-      default: 
-        return _authError();
+    case 'basic': 
+      return _authBasic(authString);
+    case 'bearer':
+      return _authBearer(authString);
+    default: 
+      return _authError();
     }
   }
   catch(e) {
@@ -29,6 +31,17 @@ module.exports = (req, res, next) => {
     return User.authenticateBasic(auth)
       .then(user => _authenticate(user) )
       .catch(next);
+  }
+
+  function _authBearer(token) {
+    return User.authenticateToken(token)
+      .then(user => {
+        if (user) {
+          req.user = user;
+          req.token = user.generateToken();
+          next();
+        } else _authError();
+      });  
   }
 
   function _authenticate(user) {
