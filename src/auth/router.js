@@ -9,8 +9,9 @@ const oauth = require('./oauth/google.js');
 
 /**
  * Post Route /signup
+ * @route POST /signup
  * @param 
- * @return
+ * @return 200
  */
 authRouter.post('/signup', (req, res, next) => {
   let user = new User(req.body);
@@ -25,9 +26,9 @@ authRouter.post('/signup', (req, res, next) => {
 });
 
 /**
- * 
- *@param
- *@return
+ * @route POST /signin - returns a token
+ * @return 200 - {string} token
+ * @return 401 - unauthorzied
  */
 authRouter.post('/signin', auth, (req, res, next) => {
   res.cookie('auth', req.token);

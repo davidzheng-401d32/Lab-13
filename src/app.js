@@ -17,6 +17,7 @@ const app = express();
 app.use(cors());
 app.use(morgan('dev'));
 
+app.use(express.static('./docs'));
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 
@@ -28,7 +29,7 @@ app.use(notFound);
 app.use(errorHandler);
 
 //JSDOC
-app.use('/docs', express.static('docs'));
+// app.use('/docs', express.static('docs'));
 
 module.exports = {
   server: app,
